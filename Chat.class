@@ -1,0 +1,34 @@
+import org.powerbot.script.rt6.*;
+
+import java.util.Random;
+
+/**
+ * Created by Joseph18 on 12/4/2014.
+ */
+public class Chat extends Task<ClientContext>{
+
+    public Chat(ClientContext ctx) {
+        super(ctx);
+    }
+
+    @Override
+    public boolean activate() {
+        return ctx.chat.queryContinue();
+    }
+
+    @Override
+    public void execute() {
+        System.out.println("Chat");
+
+        // change pattern once in a while
+        Random ran = new Random();
+        boolean random = ran.nextBoolean();
+        if(random){
+            ctx.chat.clickContinue(true);
+        } else {
+            ctx.chat.clickContinue(false);
+        }
+
+    }
+
+}
