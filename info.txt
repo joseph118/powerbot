@@ -1,0 +1,11 @@
+What it does:
+- Kills Monks at edgeville
+- Talk with Monk to heal
+- Runs away if about to die
+
+
+How to use...
+- Set the health percentage depending on when you want to talk to the monk to heal
+- Enable use skill to be able to use your abilities when in combat
+- This only supports up to 6 slots, meaning 1,2,3,4,5,6 (depending how many skills you set it to use) 
+
