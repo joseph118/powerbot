@@ -1,0 +1,43 @@
+import org.powerbot.script.rt6.ClientContext;
+import org.powerbot.script.rt6.Npc;
+
+/**
+ * Created by Joseph18 on 12/3/2014.
+ */
+public class Attack extends Task<ClientContext> {
+    private final String[] curMaxStrings = ctx.widgets.component(1430, 4).component(7).text().split("/");
+    private int currentHealth;
+    private int healthPercentage;
+
+    int npcID;
+    int healthToStopAttack;
+    public Attack(ClientContext ctx, int npcID, int setHealthPercentageToHeal){
+        super(ctx);
+        this.npcID = npcID;
+        this.healthToStopAttack = setHealthPercentageToHeal;
+    }
+
+    @Override
+    public boolean activate() {
+        currentHealth = (ctx.varpbits.varpbit(659) & 0xFFFF) >>> 1;
+        healthPercentage = (currentHealth *100) / Integer.valueOf(curMaxStrings[1]);
+        return !ctx.players.local().interacting().valid()
+                && healthPercentage > healthToStopAttack
+                && !ctx.players.local().inCombat();
+    }
+
+    @Override
+    public void execute() {
+        Functions x = new Functions();
+        Npc npc = ctx.npcs.select().select(x.nonCombatFilter).id(npcID).nearest().poll();
+
+        if (npc.inViewport()) {
+            System.out.println("Attacking NPC");
+            npc.interact("Attack");
+        } else {
+            System.out.println("Moving to NPC");
+            ctx.camera.turnTo(npc);
+            ctx.movement.step(npc);
+        }
+    }
+}
