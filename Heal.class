@@ -1,0 +1,36 @@
+import org.powerbot.script.rt6.ChatOption;
+import org.powerbot.script.rt6.ClientContext;
+
+import java.util.Random;
+
+/**
+ * Created by Joseph18 on 12/5/2014.
+ */
+public class Heal extends Task<ClientContext> {
+    public Heal(ClientContext ctx){
+        super(ctx);
+    }
+
+    @Override
+    public boolean activate() {
+        return !ctx.chat.get().isEmpty();
+    }
+
+    @Override
+    public void execute() {
+        System.out.println("Healing");
+        ChatOption getOption = ctx.chat.select().text("Can you heal me? I'm Injured.").poll();
+
+        if(getOption.valid()){
+            // anti pattern
+            Random ran = new Random();
+            boolean random = ran.nextBoolean();
+            if(random) {
+                getOption.select();
+            } else {
+                ctx.input.send("{VK_1}");
+            }
+        }
+    }
+
+}
