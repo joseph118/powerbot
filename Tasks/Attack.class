@@ -21,7 +21,8 @@ public class Attack extends Task<ClientContext> {
     public boolean activate() {
         return !ctx.players.local().interacting().valid()
                 && ctx.getHealth() > healthPercentageThreshold
-                && ctx.combatBar.targetName() == "";
+                && ctx.combatBar.targetName() == ""
+                && !ctx.players.local().inMotion();
     }
 
     @Override
