@@ -1,0 +1,39 @@
+package Tasks;
+
+import Classes.Task;
+import org.powerbot.script.Condition;
+import org.powerbot.script.rt6.Action;
+import Classes.ClientContext;
+
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
+
+import static org.powerbot.script.Random.nextInt;
+
+/**
+ * Created by Joseph18 on 12/3/2014.
+ */
+public class Skills extends Task<ClientContext> {
+    private boolean isSkillOn;
+    private final Action[] getAbilities = ctx.getActionBar();
+    private int ran = 0;
+
+    public Skills(ClientContext ctx, boolean isSkillOn){
+        super(ctx);
+        this.isSkillOn = isSkillOn;
+    }
+
+    @Override
+    public boolean activate() {
+        ran = nextInt(0, getAbilities.length);
+        return isSkillOn == true
+                && getAbilities[ran].cooldownPercentage() == -1
+                && (ctx.combatBar.targetName() != "" || ctx.combatBar.targetName() != null);
+    }
+
+    @Override
+    public void execute(){
+        System.out.println("Using Skill - " + getAbilities[ran].slot());
+        getAbilities[ran].select();
+    }
+}
