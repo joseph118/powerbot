@@ -28,7 +28,8 @@ public class Skills extends Task<ClientContext> {
         ran = nextInt(0, getAbilities.length);
         return isSkillOn == true
                 && !ctx.players.local().idle()
-                && ctx.players.local().inCombat();
+                && ctx.players.local().inCombat()
+                && ctx.combatBar.targetName() != "";
     }
 
     @Override
