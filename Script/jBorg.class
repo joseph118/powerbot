@@ -40,18 +40,16 @@ public class jBorg extends PollingScript<ClientContext>{
     }
 
     public void startBot(){
-        if(ctx.checkUI() == true) {
-            ctx.setActionBar();
-            frame.dispose();
-            taskList.addAll(Arrays.asList(
-                    new Attack(ctx, npcID, healthPercentageBeforeHealing),
-                    new Talk(ctx, npcID, healthPercentageBeforeHealing),
-                    new Chat(ctx),
-                    new Heal(ctx),
-                    new Danger(ctx, minimumHealthPercentage),
-                    new Skills(ctx, isSkillOn)
-            ));
-        }
+        ctx.setActionBar();
+        frame.dispose();
+        taskList.addAll(Arrays.asList(
+                new Attack(ctx, npcID, healthPercentageBeforeHealing),
+                new Talk(ctx, npcID, healthPercentageBeforeHealing),
+                new Chat(ctx),
+                new Heal(ctx),
+                new Danger(ctx, minimumHealthPercentage),
+                new Skills(ctx, isSkillOn)
+        ));
     }
 
     @Override
