@@ -1,36 +1,37 @@
 package Tasks;
 
 import Classes.Task;
+import org.powerbot.script.rt6.ChatOption;
 import Classes.ClientContext;
-import org.powerbot.script.rt6.GameObject;
+
+import static org.powerbot.script.Random.nextBoolean;
 
 /**
  * Created by Joseph18 on 12/5/2014.
  */
-public class Danger extends Task<ClientContext> {
-    private int minimumHealthPercentage;
-    public Danger(ClientContext ctx, int minimumHealthPercentage){
+public class Heal extends Task<ClientContext> {
+    public Heal(ClientContext ctx){
         super(ctx);
-        this.minimumHealthPercentage = minimumHealthPercentage;
     }
 
     @Override
     public boolean activate() {
-        return ctx.getHealth() < minimumHealthPercentage
-                && ctx.players.local().inCombat();
+        return !ctx.chat.get().isEmpty();
     }
 
     @Override
     public void execute() {
-        GameObject safeObject = ctx.objects.select().id(30849).nearest().poll();
-        if (safeObject.inViewport()) {
-            ctx.movement.step(safeObject);
-            //System.out.println("Running to Safety");
-        } else {
-            //System.out.println("Moving to Safety");
-            ctx.camera.turnTo(safeObject);
-            ctx.movement.step(safeObject);
-        }
+        //System.out.println("Talking with NPC to heal");
+        ChatOption getOption = ctx.chat.select().text("Can you heal me? I'm Injured.").poll();
 
+        if(getOption.valid()){
+            boolean random = nextBoolean();
+            if(random) {
+                getOption.select();
+            } else {
+                ctx.input.send("{VK_1}");
+            }
+        }
     }
+
 }
