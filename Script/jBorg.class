@@ -1,15 +1,13 @@
+package Script;
+
+import Classes.Task;
+import Classes.ClientContext;
+import Tasks.*;
+import View.jBorgUI;
 import org.powerbot.script.PollingScript;
 import org.powerbot.script.Script;
-import org.powerbot.script.rt6.ClientContext;
 
 import javax.swing.*;
-import javax.swing.text.NumberFormatter;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.text.NumberFormat;
 import java.util.*;
 import java.util.List;
 
@@ -21,9 +19,9 @@ import java.util.List;
 @Script.Manifest(name = "eMonk Destroyer", description = "Kills monks for ever")
 public class jBorg extends PollingScript<ClientContext>{
     private final int npcID = 7727;
-    private int healthPercentageToHeal = 90;
+    private int healthPercentageBeforeHealing = 90;
+    private int minimumHealthPercentage = 18;
     private boolean isSkillOn = false;
-    private int maxKey = 2;
     private JFrame frame;
 
     private List<Task> taskList = new ArrayList<Task>();
@@ -42,16 +40,18 @@ public class jBorg extends PollingScript<ClientContext>{
     }
 
     public void startBot(){
-        frame.dispose();
-        taskList.addAll(Arrays.asList(
-                new Attack(ctx, npcID, healthPercentageToHeal),
-                new Talk(ctx, npcID, healthPercentageToHeal),
-                new Chat(ctx),
-                new Heal(ctx),
-                new Skills(ctx, isSkillOn, 2),
-                new Danger(ctx),
-                new Human(ctx)
-        ));
+        if(ctx.checkUI() == true) {
+            ctx.setActionBar();
+            frame.dispose();
+            taskList.addAll(Arrays.asList(
+                    new Attack(ctx, npcID, healthPercentageBeforeHealing),
+                    new Talk(ctx, npcID, healthPercentageBeforeHealing),
+                    new Chat(ctx),
+                    new Heal(ctx),
+                    new Danger(ctx, minimumHealthPercentage),
+                    new Skills(ctx, isSkillOn)
+            ));
+        }
     }
 
     @Override
@@ -64,14 +64,10 @@ public class jBorg extends PollingScript<ClientContext>{
     }
 
     public void setHealthPercentageToHeal(int x){
-        this.healthPercentageToHeal = x;
+        this.healthPercentageBeforeHealing = x;
     }
 
     public void setIsSkillOn(boolean x){
         this.isSkillOn = x;
-    }
-
-    public void setMaxKey(int x){
-        this.maxKey = x;
     }
 }
