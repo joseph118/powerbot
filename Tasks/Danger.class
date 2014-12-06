@@ -1,0 +1,36 @@
+package Tasks;
+
+import Classes.Task;
+import Classes.ClientContext;
+import org.powerbot.script.rt6.GameObject;
+
+/**
+ * Created by Joseph18 on 12/5/2014.
+ */
+public class Danger extends Task<ClientContext> {
+    private int minimumHealthPercentage;
+    public Danger(ClientContext ctx, int minimumHealthPercentage){
+        super(ctx);
+        this.minimumHealthPercentage = minimumHealthPercentage;
+    }
+
+    @Override
+    public boolean activate() {
+        return ctx.getHealth() < minimumHealthPercentage
+                && ctx.players.local().inCombat();
+    }
+
+    @Override
+    public void execute() {
+        GameObject safeObject = ctx.objects.select().id(30849).nearest().poll();
+        if (safeObject.inViewport()) {
+            ctx.movement.step(safeObject);
+            System.out.println("Running to Safety");
+        } else {
+            System.out.println("Moving to Safety");
+            ctx.camera.turnTo(safeObject);
+            ctx.movement.step(safeObject);
+        }
+
+    }
+}
