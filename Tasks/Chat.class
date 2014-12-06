@@ -3,8 +3,6 @@ package Tasks;
 import Classes.Task;
 import Classes.ClientContext;
 
-import static org.powerbot.script.Random.nextBoolean;
-
 /**
  * Created by Joseph18 on 12/4/2014.
  */
@@ -22,14 +20,7 @@ public class Chat extends Task<ClientContext> {
     @Override
     public void execute() {
         //System.out.println("Clicking Continue");
-
-        boolean random = nextBoolean();
-        if(random){
-            ctx.chat.clickContinue(true);
-        } else {
-            ctx.chat.clickContinue(false);
-        }
-
+        ctx.chat.clickContinue(true);
     }
 
 }
