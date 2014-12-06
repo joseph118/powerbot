@@ -48,7 +48,7 @@ public class jBorg extends PollingScript<ClientContext>{
                 new Chat(ctx),
                 new Heal(ctx),
                 new Danger(ctx, minimumHealthPercentage),
-                new Skills(ctx, isSkillOn)
+                new Skills(ctx, isSkillOn, minimumHealthPercentage)
         ));
     }
 
