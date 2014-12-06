@@ -1,0 +1,40 @@
+package Tasks;
+
+import Classes.Task;
+import Classes.ClientContext;
+import org.powerbot.script.rt6.Npc;
+import Classes.Methods;
+
+/**
+ * Created by Joseph18 on 12/3/2014.
+ */
+public class Attack extends Task<ClientContext> {
+    private int npcID;
+    private int healthPercentageThreshold;
+    public Attack(ClientContext ctx, int npcID, int healthPercentageThreshold){
+        super(ctx);
+        this.npcID = npcID;
+        this.healthPercentageThreshold = healthPercentageThreshold;
+    }
+
+    @Override
+    public boolean activate() {
+        return !ctx.players.local().interacting().valid()
+                && ctx.getHealth() > healthPercentageThreshold
+                && (ctx.combatBar.targetName() == "" || ctx.combatBar.targetName() == null);
+    }
+
+    @Override
+    public void execute() {
+        Npc npc = ctx.npcs.select().select(Methods.nonCombatFilter).id(npcID).nearest().poll();
+
+        if (npc.inViewport()) {
+            System.out.println("Attacking NPC");
+            npc.interact("Attack");
+        } else {
+            System.out.println("Moving to NPC");
+            ctx.camera.turnTo(npc);
+            ctx.movement.step(npc);
+        }
+    }
+}
