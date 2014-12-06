@@ -25,9 +25,9 @@ public class Danger extends Task<ClientContext> {
         GameObject safeObject = ctx.objects.select().id(30849).nearest().poll();
         if (safeObject.inViewport()) {
             ctx.movement.step(safeObject);
-            System.out.println("Running to Safety");
+            //System.out.println("Running to Safety");
         } else {
-            System.out.println("Moving to Safety");
+            //System.out.println("Moving to Safety");
             ctx.camera.turnTo(safeObject);
             ctx.movement.step(safeObject);
         }
