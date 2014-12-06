@@ -1,7 +1,10 @@
-import org.powerbot.script.rt6.ChatOption;
-import org.powerbot.script.rt6.ClientContext;
+package Tasks;
 
-import java.util.Random;
+import Classes.Task;
+import org.powerbot.script.rt6.ChatOption;
+import Classes.ClientContext;
+
+import static org.powerbot.script.Random.nextBoolean;
 
 /**
  * Created by Joseph18 on 12/5/2014.
@@ -18,13 +21,11 @@ public class Heal extends Task<ClientContext> {
 
     @Override
     public void execute() {
-        System.out.println("Healing");
+        System.out.println("Talking with NPC to heal");
         ChatOption getOption = ctx.chat.select().text("Can you heal me? I'm Injured.").poll();
 
         if(getOption.valid()){
-            // anti pattern
-            Random ran = new Random();
-            boolean random = ran.nextBoolean();
+            boolean random = nextBoolean();
             if(random) {
                 getOption.select();
             } else {
