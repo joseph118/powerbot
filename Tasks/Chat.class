@@ -21,7 +21,7 @@ public class Chat extends Task<ClientContext> {
 
     @Override
     public void execute() {
-        System.out.println("Clicking Continue");
+        //System.out.println("Clicking Continue");
 
         boolean random = nextBoolean();
         if(random){
