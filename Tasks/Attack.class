@@ -30,10 +30,10 @@ public class Attack extends Task<ClientContext> {
         Npc npc = ctx.npcs.select().select(Methods.nonCombatFilter).id(npcID).nearest().poll();
 
         if (npc.inViewport()) {
-            System.out.println("Attacking NPC");
+            //System.out.println("Attacking NPC");
             npc.interact("Attack");
         } else {
-            System.out.println("Moving to NPC");
+            //System.out.println("Moving to NPC");
             ctx.camera.turnTo(npc);
             ctx.movement.step(npc);
         }
