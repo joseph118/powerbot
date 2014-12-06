@@ -2,8 +2,14 @@ package Tasks;
 
 import Classes.Task;
 import Classes.ClientContext;
+import org.powerbot.script.Condition;
 import org.powerbot.script.rt6.Npc;
 import Classes.Methods;
+
+
+import java.util.concurrent.Callable;
+
+import static org.powerbot.script.Random.nextBoolean;
 
 /**
  * Created by Joseph18 on 12/3/2014.
@@ -27,15 +33,32 @@ public class Attack extends Task<ClientContext> {
 
     @Override
     public void execute() {
-        Npc npc = ctx.npcs.select().select(Methods.nonCombatFilter).id(npcID).nearest().poll();
+        final Npc npc = ctx.npcs.select().select(Methods.nonCombatFilter).id(npcID).nearest().poll();
+
+        // check underneath changed
 
         if (npc.inViewport()) {
             //System.out.println("Attacking NPC");
+            ctx.camera.turnTo(npc);
             npc.interact("Attack");
+
+            Condition.wait(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    return !ctx.players.local().idle() || ctx.players.local().interacting().valid();
+                }
+            });
+
         } else {
             //System.out.println("Moving to NPC");
-            ctx.camera.turnTo(npc);
             ctx.movement.step(npc);
+
+            Condition.wait(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    return npc.inViewport();
+                }
+            }, 1000, 5);
         }
     }
 }
