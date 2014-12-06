@@ -23,7 +23,8 @@ public class Talk extends Task<ClientContext> {
         return  ctx.getHealth() < healthPercentageThreshold
                 && !ctx.chat.queryContinue()
                 && ctx.chat.get().isEmpty()
-                && ctx.combatBar.targetName() == "";
+                && ctx.combatBar.targetName() == ""
+                && !ctx.players.local().inMotion();
     }
 
     @Override
