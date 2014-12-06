@@ -27,13 +27,21 @@ public class Skills extends Task<ClientContext> {
     public boolean activate() {
         ran = nextInt(0, getAbilities.length);
         return isSkillOn == true
-                && getAbilities[ran].cooldownPercentage() == -1
-                && (ctx.combatBar.targetName() != "" || ctx.combatBar.targetName() != null);
+                && !ctx.players.local().idle()
+                && ctx.players.local().inCombat();
     }
 
     @Override
     public void execute(){
-        System.out.println("Using Skill - " + getAbilities[ran].slot());
-        getAbilities[ran].select();
+        if(getAbilities[ran].ready()){
+            System.out.println("Using Skill - " + getAbilities[ran].slot());
+            getAbilities[ran].select(true);
+            Condition.wait(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    return ctx.players.local().idle();
+                }
+            });
+        }
     }
 }
