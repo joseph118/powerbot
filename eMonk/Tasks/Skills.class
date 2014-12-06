@@ -17,8 +17,9 @@ public class Skills extends Task<ClientContext> {
     private boolean isSkillOn;
     private final Action[] getAbilities = ctx.getActionBar();
     private int ran = 0;
+    private int minimumHealthPercentage = 0;
 
-    public Skills(ClientContext ctx, boolean isSkillOn){
+    public Skills(ClientContext ctx, boolean isSkillOn, int minimumHealthPercentage){
         super(ctx);
         this.isSkillOn = isSkillOn;
     }
@@ -35,12 +36,13 @@ public class Skills extends Task<ClientContext> {
     @Override
     public void execute(){
         if(getAbilities[ran].ready()){
-            System.out.println("Using Skill - " + getAbilities[ran].slot());
+            //System.out.println("Using Skill - " + getAbilities[ran].slot());
             getAbilities[ran].select(true);
             Condition.wait(new Callable<Boolean>() {
                 @Override
                 public Boolean call() throws Exception {
-                    return ctx.players.local().idle();
+                    return ctx.players.local().idle() || ctx.getHealth() < minimumHealthPercentage
+                            || ctx.combatBar.targetName() != "";
                 }
             });
         }
