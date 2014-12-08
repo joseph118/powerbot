@@ -1,5 +1,5 @@
 Classes -> Inherited Classes from API
-Model -> Inherited Class of Action to map Skills
+Model -> Class to map in-game skills
 Script -> Main Class
 Tasks
 View -> UI
