@@ -7,11 +7,13 @@ public class Ability {
     private int id;
     private String name;
     private int adrenaline;
+    private AbilityType type;
 
-    public Ability(int id, String name, int adrenaline){
+    public Ability(int id, String name, int adrenaline, AbilityType abilityType){
         this.id = id;
         this.name = name;
         this.adrenaline = adrenaline;
+        this.type = abilityType;
     }
 
     public int getId(){
@@ -24,6 +26,17 @@ public class Ability {
 
     public int getAdrenaline(){
         return this.adrenaline;
+    }
+
+    public AbilityType getAbilityType(){ return this.type; }
+
+    public enum AbilityType{
+        Magic,
+        Defence,
+        Constitution,
+        Strength,
+        Ranged,
+        Attack
     }
 }
 
