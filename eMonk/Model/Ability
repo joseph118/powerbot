@@ -1,0 +1,29 @@
+package Model;
+
+/**
+ * Created by Joseph18 on 12/8/2014.
+ */
+public class Ability {
+    private int id;
+    private String name;
+    private int adrenaline;
+
+    public Ability(int id, String name, int adrenaline){
+        this.id = id;
+        this.name = name;
+        this.adrenaline = adrenaline;
+    }
+
+    public int getId(){
+        return this.id;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public int getAdrenaline(){
+        return this.adrenaline;
+    }
+}
+
