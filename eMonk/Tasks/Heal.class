@@ -11,6 +11,8 @@ import java.util.concurrent.Callable;
  * Created by Joseph18 on 12/5/2014.
  */
 public class Heal extends Task<ClientContext> {
+    private String task = "";
+
     public Heal(ClientContext ctx){
         super(ctx);
     }
@@ -22,7 +24,8 @@ public class Heal extends Task<ClientContext> {
 
     @Override
     public void execute() {
-        System.out.println("Talking with NPC to heal");
+        setTask("Talking with NPC to heal");
+        System.out.println(getTask());
         ChatOption getOption = ctx.chat.select().text("Can you heal me? I'm Injured.").poll();
 
         if(getOption.valid()){
@@ -37,4 +40,10 @@ public class Heal extends Task<ClientContext> {
         }, 1000, 5);
     }
 
+    public String getTask(){
+        return this.task;
+    }
+    private void setTask(String task){
+        this.task = task;
+    }
 }
