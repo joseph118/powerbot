@@ -2,40 +2,39 @@ package Tasks;
 
 import Classes.Task;
 import Classes.ClientContext;
-import org.powerbot.script.rt6.GameObject;
+import org.powerbot.script.Condition;
+
+import java.util.concurrent.Callable;
 
 /**
- * Created by Joseph18 on 12/5/2014.
+ * Created by Joseph18 on 12/4/2014.
  */
-public class Danger extends Task<ClientContext> {
-    private int minimumHealthPercentage;
-    private String task = "";
+public class Chat extends Task<ClientContext> {
 
-    public Danger(ClientContext ctx, int minimumHealthPercentage){
+    public Chat(ClientContext ctx) {
         super(ctx);
-        this.minimumHealthPercentage = minimumHealthPercentage;
     }
+    private String task = "";
 
     @Override
     public boolean activate() {
-        return ctx.getHealth() < minimumHealthPercentage
-                && ctx.getTargetNPC().valid();
+        return ctx.chat.queryContinue();
     }
 
     @Override
     public void execute() {
-        GameObject safeObject = ctx.objects.select().id(30849).nearest().poll();
-        if (safeObject.inViewport()) {
-            ctx.movement.step(safeObject);
-            setTask("Running to Safety");
-            System.out.println(getTask());
-        } else {
-            setTask("Moving to Safety");
-            System.out.println(getTask());
-            ctx.camera.turnTo(safeObject);
-            ctx.movement.step(safeObject);
-        }
+        setTask("Clicking Continue");
+        System.out.println(getTask());
+        ctx.chat.clickContinue(true);
+
+        Condition.wait(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                return !ctx.chat.get().isEmpty() || ctx.chat.queryContinue();
+            }
+        }, 1000, 5);
     }
+
 
     public String getTask(){
         return this.task;
