@@ -25,4 +25,8 @@ public class FindTarget extends Task<ClientContext> {
         ctx.findClosestNpc();
     }
 
+    public String getTask(){
+        return "Total Kills: " + this.killCounter;
+    }
+
 }
