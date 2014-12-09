@@ -9,6 +9,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.NumberFormat;
 import Script.jBorg;
+import javax.swing.Timer;
 
 /**
  * Created by Joseph18 on 12/5/2014.
@@ -16,21 +17,49 @@ import Script.jBorg;
 public class jBorgUI implements ItemListener{
     JPanel menuGroup;
     jBorg getClass;
+    JLabel lblTime;
+    JLabel lblKills;
+    JLabel lblTask;
+    long startBotTime = System.currentTimeMillis();
+
+    private String readableTime(){
+        long x = System.currentTimeMillis();
+        x = x - startBotTime;
+        return (x/(1000*60*60))%24 + ":" + (x/(1000*60))%60 + ":" + (x/1000)%60;
+    }
 
     public jBorgUI(jBorg x){
         this.getClass = x;
+        lblTime = new JLabel("Total Time: 0");
+        lblKills = new JLabel("Total Kills: 0");
+        lblTask = new JLabel("Current Task: Idle");
+    }
+
+    public void updateTime(){
+        lblTime.setText("Total Time: " + readableTime());
+    }
+
+    public void updateUI(){
+        lblKills.setText(getClass.getTotalKills());
+        lblTask.setText(getClass.getTask());
     }
 
     public void userInterface(Container pane){
         JPanel menuStart = new JPanel(new GridLayout(4,1));
-        JPanel menuRun = new JPanel();
+        JPanel menuRun = new JPanel(new GridLayout(3, 1));
+
+        menuRun.add(lblTime);
+        menuRun.add(lblKills);
+        menuRun.add(lblTask);
+        menuRun.setBorder(BorderFactory.createEmptyBorder(0,8,0,8));
 
         menuGroup = new JPanel(new CardLayout());
         menuGroup.add(menuStart, "Menu");
+        menuGroup.add(menuRun, "Stats");
 
         JPanel cboPane = new JPanel();
-        String cboItems[] = {"Menu"};
-        JComboBox cbo = new JComboBox(cboItems);
+        String cboItems[] = {"Menu", "Stats"};
+        final JComboBox cbo = new JComboBox(cboItems);
         cbo.setEditable(false);
         cbo.addItemListener(this);
         cboPane.add(cbo);
@@ -63,11 +92,12 @@ public class jBorgUI implements ItemListener{
         m2.add(useSkills);
 
         JPanel m3 = new JPanel(new GridLayout(1,2));
-        JLabel bb = new JLabel("*Future Use*");
-        final JCheckBox txtBB = new JCheckBox();
-        bb.setLabelFor(txtBB);
+        JLabel bb = new JLabel("");
+        //final JCheckBox txtBB = new JCheckBox();
+        final JLabel bb1 = new JLabel("");
+        bb.setLabelFor(bb1);
         m3.add(bb);
-        m3.add(txtBB);
+        m3.add(bb1);
 
         JPanel m4 = new JPanel(new GridLayout(1,1,8,8));
 
@@ -76,17 +106,19 @@ public class jBorgUI implements ItemListener{
             public void actionPerformed(ActionEvent e)
             {
                 int getTxtHealth = Integer.parseInt(txtHP.getText());
+                txtHP.setEditable(false);
                 boolean getUseSkills;
-                //int getAS = Integer.parseInt(txtAS.getText());
                 if(useSkills.isSelected()){
                     getUseSkills = true;
                 } else {
                     getUseSkills = false;
                 }
+                useSkills.setEnabled(false);
                 getClass.setHealthPercentageToHeal(getTxtHealth);
                 getClass.setIsSkillOn(getUseSkills);
                 getClass.startBot();
                 btnStart.setVisible(false);
+                cbo.setSelectedItem("Stats");
             }
         });
         m4.add(btnStart);
